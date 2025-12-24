@@ -11,3 +11,11 @@ body::before{background-image:url("AI-Agents.png"),url("bg-ai.svg"),url("bg-scie
 .bg-background{background-color:rgba(255,255,255,.88)}
 @supports (color:color-mix(in oklab,white 88%,transparent)){.bg-background{background-color:color-mix(in oklab,#fff 88%,transparent)}}
 body::before{filter:blur(14px);opacity:.38}
+
+/* Fix background overlay stacking */
+body{position:relative}
+body::before{content:"";position:fixed;inset:-10
+/* Fix background overlay stacking */
+body{position:relative}
+body::before{content:"";position:fixed;inset:-10%;z-index:-1;pointer-events:none;background-image:url("AI-Agents.png"),url("bg-ai.svg"),url("bg-science.svg"),url("bg-tech.svg"),url("bg-engineering.svg");background-repeat:no-repeat;background-size:cover,240px,260px,220px,250px;background-position:50% var(--bg-scroll,50%),8% 18%,82% 12%,12% 72%,86% 78%;background-attachment:scroll;opacity:.3;filter:blur(14px)}
+#root{position:relative;z-index:1}
