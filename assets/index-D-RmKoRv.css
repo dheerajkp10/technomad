@@ -5,9 +5,3 @@ body{position:relative}
 body::before{content:"";position:fixed;inset:-10%;background-image:url("bg-ai.svg"),url("bg-science.svg"),url("bg-tech.svg"),url("bg-engineering.svg");background-repeat:no-repeat;background-size:240px,260px,220px,250px;background-position:8% 18%,82% 12%,12% 72%,86% 78%;opacity:.25;filter:blur(8px);z-index:0;pointer-events:none}
 
 body::before{background-image:url("AI-Agents.png"),url("bg-ai.svg"),url("bg-science.svg"),url("bg-tech.svg"),url("bg-engineering.svg");background-size:cover,240px,260px,220px,250px;background-position:50% var(--bg-scroll,50%),8% 18%,82% 12%,12% 72%,86% 78%;opacity:.28;filter:blur(22px);background-attachment:scroll}
-
-.bg-white{background-color:rgba(255,255,255,.78)}
-@supports (color:color-mix(in oklab,white 78%,transparent)){.bg-white{background-color:color-mix(in oklab,#fff 78%,transparent)}}
-.bg-background{background-color:rgba(255,255,255,.88)}
-@supports (color:color-mix(in oklab,white 88%,transparent)){.bg-background{background-color:color-mix(in oklab,#fff 88%,transparent)}}
-body::before{filter:blur(14px);opacity:.38}
