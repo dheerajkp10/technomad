@@ -57,7 +57,7 @@
       })();
     </script>
     <script>
-      // Mobile-only helper to blur the about page profile hero when it scrolls out of view
+      // Mobile-only helper for the /about page
       (function () {
         var ABOUT_PATH = "/tech.nomad.life/about";
         var isAboutPage = location.pathname === ABOUT_PATH || location.pathname === ABOUT_PATH + "/";
@@ -65,6 +65,7 @@
 
         var mq = window.matchMedia("(max-width: 768px)");
         var profileSection;
+        var blurObserver;
 
         function findProfileSection() {
           var img = document.querySelector('img[src*="profile-about"]');
@@ -72,25 +73,54 @@
           return img.closest("section") || img.closest("div");
         }
 
-        function toggleBlur() {
+        function applySpacingBetweenJourneyCards() {
+          var immigrationCard = Array.from(document.querySelectorAll("h3")).find(function (h) {
+            return h.textContent.trim().indexOf("My Immigration Journey") !== -1;
+          });
+          var travelCard = Array.from(document.querySelectorAll("h3")).find(function (h) {
+            return h.textContent.trim().indexOf("Travel & Cultural Exploration") !== -1;
+          });
+          if (!immigrationCard || !travelCard) return;
+          var travelCardContainer = travelCard.closest(".card-glass");
+          if (travelCardContainer) {
+            travelCardContainer.style.marginTop = "1.5rem"; // match gap-6 spacing
+          }
+        }
+
+        function ensureBlurListener() {
           if (!profileSection) return;
+
+          // Clean up previous observer
+          if (blurObserver) {
+            blurObserver.disconnect();
+            blurObserver = null;
+          }
+
           if (!mq.matches) {
             profileSection.classList.remove("about-profile--blurred");
             return;
           }
 
-          var rect = profileSection.getBoundingClientRect();
-          var hasScrolledPast = rect.top < -80 || rect.bottom < 60;
-          profileSection.classList.toggle("about-profile--blurred", hasScrolledPast);
+          blurObserver = new IntersectionObserver(
+            function (entries) {
+              entries.forEach(function (entry) {
+                var mostlyOutOfView = entry.intersectionRatio < 0.35 || entry.boundingClientRect.top < -40;
+                profileSection.classList.toggle("about-profile--blurred", mostlyOutOfView);
+              });
+            },
+            { threshold: [0, 0.35, 1], rootMargin: "-10% 0px -30% 0px" }
+          );
+
+          blurObserver.observe(profileSection);
         }
 
         function initWatcher() {
           profileSection = findProfileSection();
           if (!profileSection) return false;
           profileSection.classList.add("about-profile-section");
-          toggleBlur();
-          window.addEventListener("scroll", toggleBlur, { passive: true });
-          window.addEventListener("resize", toggleBlur);
+          ensureBlurListener();
+          applySpacingBetweenJourneyCards();
+          window.addEventListener("resize", ensureBlurListener);
           return true;
         }
 
